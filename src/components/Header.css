@@ -1,0 +1,15 @@
+.pokedex-navbar{
+    margin-bottom: 20px;
+    background-color: rgb(0, 68, 255);
+}
+.pokedex-navbar .MuiAppBar-root{
+    background-color: gray;
+}
+.image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+}
