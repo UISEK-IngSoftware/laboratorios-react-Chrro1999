@@ -1,38 +1,55 @@
 import axios from "axios";
+import { pokemons as localPokemons } from "../data/pokemons";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
-const CLIENT_SECRET = import.meta.env.VITE_CLIENT_SECRET;
 
-/** OBTIENE LOS POKEMONS DESDE LA API Y RETORNA DATA DE POKEMONS */
-export async function fetchPokemons() {
-    const response = await axios.get(${API_BASE_URL}/pokemons/);
-    return response.data;
+// Validar que API_BASE_URL está definido
+if (!API_BASE_URL) {
+    console.error('VITE_API_BASE_URL no está definido en .env');
 }
 
-/** CONFIGURAR INTERCEPTOR PARA AGREGAR TOKEN */
-axios.interceptors.request.use((config) => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-        config.headers.Authorization = Bearer ${token};
-    }
-    return config;
+// Crear instancia de axios con configuración predeterminada
+const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
 });
 
-/** CONVERTIR UN ARCHIVO A BASE 64 */
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      // reader.result ya incluye el encabezado, lo usamos completo
-      resolve(reader.result);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+// Interceptor para agregar token
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("access_token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+export async function fetchPokemons() {
+    try {
+        const response = await axiosInstance.get(`/api/pokemon/`);
+        return response.data.results || response.data;
+    } catch (error) {
+        console.warn('Error fetching pokemons from API, using local data:', error.message);
+        // Fallback a datos locales
+        return localPokemons;
+    }
 }
 
-export async function createPokemon (pokemonData) {
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+export async function createPokemon(pokemonData) {
     let pictureBase64 = "";
     if (pokemonData.picture) {
         pictureBase64 = await fileToBase64(pokemonData.picture);
@@ -41,8 +58,18 @@ export async function createPokemon (pokemonData) {
     const payload = {
         ...pokemonData,
         picture: pictureBase64,
-    }
+    };
 
-    const response = await axios.post(${API_BASE_URL}/pokemons/, payload)
+    const response = await axiosInstance.post(`/api/pokemon/`, payload);
+    return response.data;
+}
+
+export async function updatePokemon(id, pokemonData) {
+    const response = await axiosInstance.put(`/api/pokemon/${id}/`, pokemonData);
+    return response.data;
+}
+
+export async function deletePokemon(id) {
+    const response = await axiosInstance.delete(`/api/pokemon/${id}/`);
     return response.data;
 }

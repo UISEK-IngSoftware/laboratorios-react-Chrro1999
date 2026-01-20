@@ -39,22 +39,57 @@ export default function PokemonForm() {
         } catch (error) {
             console.error("Error al crear el pokemon:", error);
             alert("Error al crear el pokemon. Por favor, intenta de nuevo.");
-            return;
         }
     }
+    
     return (
         <>
             <Typography variant="h4" gutterBottom>
                 Formulario de Pokemon
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <TextField label="Nombre" variant='outlined' onChange={handleChange} />
-                <TextField label="Tipo" variant='outlined' onChange={handleChange} />
-                <TextField label="Peso" variant='outlined' type="number" onChange={handleChange} />
-                <TextField label="Altura" variant='outlined' type="number" onChange={handleChange} />
-                <input type="file" name="picture" accept="image/*" id="imagePokemon" onChange={handleChange} />
-                <Button type="submit" variant="contained">Guardar </Button>
-
+                <TextField 
+                    label="Nombre" 
+                    name="name"
+                    variant='outlined' 
+                    value={pokemonData.name}
+                    onChange={handleChange}
+                    required
+                />
+                <TextField 
+                    label="Tipo" 
+                    name="type"
+                    variant='outlined' 
+                    value={pokemonData.type}
+                    onChange={handleChange}
+                    required
+                />
+                <TextField 
+                    label="Peso" 
+                    name="weight"
+                    variant='outlined' 
+                    type="number" 
+                    value={pokemonData.weight}
+                    onChange={handleChange}
+                    required
+                />
+                <TextField 
+                    label="Altura" 
+                    name="height"
+                    variant='outlined' 
+                    type="number" 
+                    value={pokemonData.height}
+                    onChange={handleChange}
+                    required
+                />
+                <input 
+                    type="file" 
+                    name="picture" 
+                    accept="image/*" 
+                    id="imagePokemon" 
+                    onChange={handleChange} 
+                />
+                <Button type="submit" variant="contained">Guardar</Button>
             </Box>
         </>
     )

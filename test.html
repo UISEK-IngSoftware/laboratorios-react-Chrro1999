@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokedex - Debug</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+      h1 {
+        color: #333;
+      }
+      .status {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Servidor Vite está corriendo</h1>
+    <div class="status">
+      <p>Si ves esto, el servidor Vite funciona correctamente.</p>
+      <p>Hora del servidor: <span id="time"></span></p>
+    </div>
+    <script>
+      document.getElementById('time').textContent = new Date().toLocaleTimeString();
+    </script>
+  </body>
+</html>
