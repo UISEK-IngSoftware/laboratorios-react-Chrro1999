@@ -33,7 +33,6 @@ export async function fetchPokemons() {
         return response.data.results || response.data;
     } catch (error) {
         console.warn('Error fetching pokemons from API, using local data:', error.message);
-        // Fallback a datos locales
         return localPokemons;
     }
 }

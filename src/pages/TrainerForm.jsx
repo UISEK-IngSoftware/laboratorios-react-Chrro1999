@@ -8,6 +8,7 @@ import {
   Paper,
   Grid
 } from '@mui/material';
+import Spinner from '../components/Spinner';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { createTrainer, updateTrainer, getTrainer } from '../services/trainerService';
 
@@ -31,7 +32,6 @@ function TrainerForm({ readOnly = false }) {
       loadTrainerData();
     }
   }, [id]);
-
   const loadTrainerData = async () => {
     try {
       setLoading(true);
@@ -117,100 +117,94 @@ function TrainerForm({ readOnly = false }) {
     navigate('/trainers');
   };
 
-  if (loading && isEditMode) {
-    return (
-      <Container maxWidth="md">
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
-          <Typography>Cargando...</Typography>
-        </Box>
-      </Container>
-    );
-  }
-
   return (
-    <Container maxWidth="md">
-      <Box sx={{ mt: 4, mb: 4 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom align="center">
-            {readOnly ? 'Ver Entrenador' : (isEditMode ? 'Editar Entrenador' : 'Nuevo Entrenador')}
-          </Typography>
-          
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Nombre del Entrenador"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  error={!!errors.name}
-                  helperText={errors.name}
-                  required
-                  disabled={loading || readOnly}
-                />
-              </Grid>
+    <>
+      {loading && isEditMode && <Spinner loading={loading} message="Cargando entrenador..." />}
+      {!loading && (
+        <Container maxWidth="md">
+          <Box sx={{ mt: 4, mb: 4 }}>
+            <Paper elevation={3} sx={{ p: 4 }}>
+              <Typography variant="h4" component="h1" gutterBottom align="center">
+                {readOnly ? 'Ver Entrenador' : (isEditMode ? 'Editar Entrenador' : 'Nuevo Entrenador')}
+              </Typography>
               
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Nivel"
-                  name="nivel"
-                  type="number"
-                  value={formData.nivel}
-                  onChange={handleChange}
-                  error={!!errors.nivel}
-                  helperText={errors.nivel}
-                  disabled={loading || readOnly}
-                  inputProps={{ min: 1, max: 100 }}
-                />
-              </Grid>
-              
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Región"
-                  name="region"
-                  value={formData.region}
-                  onChange={handleChange}
-                  disabled={loading || readOnly}
-                />
-              </Grid>
-              
-              <Grid item xs={12}>
-                <Box display="flex" justifyContent="flex-end" gap={2}>
-                  {readOnly ? (
-                    <Button
-                      variant="outlined"
-                      onClick={handleCancel}
-                    >
-                      Volver
-                    </Button>
-                  ) : (
-                    <>
-                      <Button
-                        variant="outlined"
-                        onClick={handleCancel}
-                        disabled={loading}
-                      >
-                        Cancelar
-                      </Button>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={loading}
-                      >
-                        {loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear')}
-                      </Button>
-                    </>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </form>
-        </Paper>
-      </Box>
-    </Container>
+              <form onSubmit={handleSubmit}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Nombre del Entrenador"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      error={!!errors.name}
+                      helperText={errors.name}
+                      required
+                      disabled={readOnly}
+                    />
+                  </Grid>
+                  
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Nivel"
+                      name="nivel"
+                      type="number"
+                      value={formData.nivel}
+                      onChange={handleChange}
+                      error={!!errors.nivel}
+                      helperText={errors.nivel}
+                      disabled={readOnly}
+                      inputProps={{ min: 1, max: 100 }}
+                    />
+                  </Grid>
+                  
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Región"
+                      name="region"
+                      value={formData.region}
+                      onChange={handleChange}
+                      disabled={readOnly}
+                    />
+                  </Grid>
+                  
+                  <Grid item xs={12}>
+                    <Box display="flex" justifyContent="flex-end" gap={2}>
+                      {readOnly ? (
+                        <Button
+                          variant="outlined"
+                          onClick={handleCancel}
+                        >
+                          Volver
+                        </Button>
+                      ) : (
+                        <>
+                          <Button
+                            variant="outlined"
+                            onClick={handleCancel}
+                          >
+                            Cancelar
+                          </Button>
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            disabled={loading}
+                          >
+                            {isEditMode ? 'Actualizar' : 'Crear'}
+                          </Button>
+                        </>
+                      )}
+                    </Box>
+                  </Grid>
+                </Grid>
+              </form>
+            </Paper>
+          </Box>
+        </Container>
+      )}
+    </>
   );
 }
 

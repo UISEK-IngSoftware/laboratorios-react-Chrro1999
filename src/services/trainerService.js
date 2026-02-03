@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// Validar que API_BASE_URL está definido
+
 if (!API_BASE_URL) {
     console.error('VITE_API_BASE_URL no está definido en .env');
 }
@@ -28,8 +28,6 @@ axiosInstance.interceptors.request.use(
 
 export async function fetchTrainers() {
     const response = await axiosInstance.get(`/trainers/`);
-    // Si la respuesta tiene "results", retorna ese array (paginado)
-    // Si no, verifica si response.data es un array, si no retorna array vacío
     if (response.data.results && Array.isArray(response.data.results)) {
         return response.data.results;
     } else if (Array.isArray(response.data)) {

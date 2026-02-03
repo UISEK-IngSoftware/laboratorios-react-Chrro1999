@@ -26,7 +26,7 @@ export default function Header() {
                 <Toolbar>
                     <Button color="inherit" onClick={() => navigate('/')}>Inicio</Button>
                     
-                    {/* NUEVO: Botón para Entrenadores */}
+                    {/* Botón para Entrenadores */}
                     <Button color="inherit" onClick={() => navigate('/trainers')}>
                         Entrenadores
                     </Button>
